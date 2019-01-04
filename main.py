@@ -122,7 +122,7 @@ def send_mail():
     mail_host = "smtp.XXX.com"  # 设置服务器
     mail_user = "XXXX"  # 用户名
     mail_pass = "XXXXXX"  # 口令
-
+    port = 25
     receivers = ['idle001@126.com']  # 接收邮件，可设置为你的QQ邮箱或者其他邮箱
     message = MIMEText('Finished', 'plain', 'utf-8')
     message['From'] = Header("Cloud", 'utf-8')
@@ -132,7 +132,10 @@ def send_mail():
 
     try:
         smtpObj = smtplib.SMTP()
-        smtpObj.connect(mail_host, 25)  # 25 为 SMTP 端口号
+        smtpObj.connect(mail_host, port)  # 25 为 SMTP 端口号
+    except:
+        smtpObj = smtplib.SMTP_SSL(mail_host,port)
+    try:
         smtpObj.login(mail_user, mail_pass)
         smtpObj.sendmail(mail_user, receivers, message.as_string())
         print("邮件发送成功")
